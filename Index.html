@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NPS September</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--red:#EA1C0A;--red2:#B30F00;--red3:#4a0500;--yel:#E6E200;--ink:#0b0101}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--ink);color:#fff;font-family:Archivo,Arial,sans-serif}
+button{font-family:inherit}
+.scene{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .6s;overflow:hidden}
+.scene.on{opacity:1;pointer-events:auto}
+.big-font{font-family:'Archivo Black','Arial Black',sans-serif}
+
+/* Rays */
+.rays{position:absolute;inset:-60%;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.10) 0deg 7deg,transparent 7deg 18deg);animation:spin 22s linear infinite;opacity:0;transition:opacity .8s;z-index:1;pointer-events:none}
+#intro .rays,#nope .rays,#final .rays{opacity:1}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* INTRO */
+#intro,#nope,#final{background:radial-gradient(circle at 50% 40%,#ff3b22 0%,var(--red) 35%,var(--red2) 75%,var(--red3) 100%)}
+.content{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center}
+.kick{display:inline-block;background:var(--yel);color:var(--red2);font-weight:900;font-size:clamp(14px,1.8vw,22px);letter-spacing:.14em;text-transform:uppercase;padding:.5em 1.2em;border-radius:999px;margin-bottom:3vh;animation:drop .8s cubic-bezier(.2,1.6,.4,1) both, wobble 2.4s ease-in-out 1s infinite}
+h1.q{font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(34px,6.4vw,96px);line-height:1.02;max-width:15ch;text-shadow:0 6px 0 rgba(0,0,0,.25);animation:qIn 1s cubic-bezier(.2,1.5,.4,1) .2s both, breathe 2.6s ease-in-out 1.4s infinite}
+h1.q .hl{color:var(--yel)}
+.btns{display:flex;gap:28px;margin-top:5vh;flex-wrap:wrap;justify-content:center;animation:rise .7s .9s both}
+.btn{font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(22px,3.4vw,44px);padding:.45em 1.6em;border-radius:999px;border:0;cursor:pointer}
+.btn.ja{background:var(--yel);color:var(--red2);box-shadow:0 10px 0 #9e9b00;animation:glow 1.3s ease-in-out infinite;transition:transform .15s}
+.btn.ja:hover{transform:scale(1.08) rotate(-2deg)}
+.btn.ja:active{transform:translateY(6px);box-shadow:0 4px 0 #9e9b00}
+.btn.nej{background:transparent;color:#fff;border:4px solid #fff;transition:transform .35s cubic-bezier(.2,1.6,.4,1)}
+.hint{margin-top:2.4vh;min-height:1.4em;font-weight:800;font-size:clamp(14px,1.7vw,20px);opacity:.9}
+.sound{margin-top:3vh;font-weight:700;font-size:clamp(12px,1.3vw,15px);opacity:.75}
+.fstar{position:absolute;z-index:2;background:var(--yel);pointer-events:none;clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);animation:floatStar linear infinite}
+@keyframes floatStar{0%{transform:translateY(0) rotate(0) scale(.8);opacity:.0}10%{opacity:.95}50%{transform:translateY(-40px) rotate(180deg) scale(1.1)}90%{opacity:.95}100%{transform:translateY(0) rotate(360deg) scale(.8);opacity:0}}
+@keyframes qIn{0%{transform:scale(.3) rotate(-8deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+@keyframes drop{0%{transform:translateY(-120px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 0 rgba(230,226,0,0))}50%{filter:drop-shadow(0 0 22px rgba(230,226,0,.9))}}
+@keyframes rise{0%{transform:translateY(40px);opacity:0}100%{transform:translateY(0);opacity:1}}
+
+/* NOPE */
+#nopeText{position:relative;z-index:3;font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(30px,5.6vw,84px);max-width:16ch;line-height:1.05;min-height:2.2em}
+#nopeEmoji{position:relative;z-index:3;font-size:clamp(70px,12vw,170px);opacity:0;transform:scale(0)}
+#nopeEmoji.pop{animation:emojiPop .8s cubic-bezier(.2,1.8,.4,1) both}
+#nopeSub{position:relative;z-index:3;font-weight:900;font-size:clamp(18px,2.6vw,34px);color:var(--yel);opacity:0}
+#nopeSub.show{animation:rise .6s both}
+@keyframes emojiPop{0%{opacity:0;transform:scale(0) rotate(-40deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+
+/* STAGE */
+#stage{background:var(--ink);transition:opacity .6s,background .3s;padding:0}
+#stage.rays-on{background:radial-gradient(circle at 50% 50%,#ff3b22 0%,var(--red) 30%,var(--red2) 65%,#2a0300 100%)}
+#stage.rays-on .rays{opacity:1}
+#lines{position:absolute;inset:0;z-index:4;display:grid;place-items:center;padding:16px}
+#lines>.line{grid-area:1/1;max-width:94vw}
+.beam{position:absolute;bottom:-10%;width:32vw;height:140vh;z-index:2;opacity:0;transition:opacity .6s;pointer-events:none;background:linear-gradient(to top,rgba(255,250,210,.38),transparent 80%);clip-path:polygon(44% 100%,56% 100%,100% 0,0 0);transform-origin:50% 100%;mix-blend-mode:screen}
+.beam.b1{left:2%;animation:sweepL 2.1s ease-in-out infinite alternate}
+.beam.b2{right:2%;animation:sweepR 2.4s ease-in-out infinite alternate}
+#stage.beams .beam{opacity:1}
+@keyframes sweepL{from{transform:rotate(-35deg)}to{transform:rotate(30deg)}}
+@keyframes sweepR{from{transform:rotate(35deg)}to{transform:rotate(-30deg)}}
+.vig{position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(circle,transparent 30%,rgba(234,28,10,.6) 100%);opacity:0}
+#stage.tense .vig{animation:heart .8s ease-in-out infinite}
+@keyframes heart{0%,100%{opacity:.2}15%{opacity:.95}30%{opacity:.35}45%{opacity:.85}}
+.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:translate(0)}10%{transform:translate(-16px,9px)}20%{transform:translate(13px,-11px)}30%{transform:translate(-11px,-6px)}40%{transform:translate(9px,10px)}50%{transform:translate(-7px,4px)}60%{transform:translate(6px,-6px)}70%{transform:translate(-4px,3px)}80%{transform:translate(3px,-2px)}}
+
+.slam{font-family:'Archivo Black','Arial Black',sans-serif;line-height:.9;letter-spacing:-.01em;text-transform:uppercase;color:#fff;white-space:nowrap;text-shadow:0 0 40px rgba(234,28,10,.85),0 10px 0 var(--red2);animation:slamIn .55s cubic-bezier(.18,1.4,.4,1) both}
+.slam.red{color:var(--red);text-shadow:0 0 60px rgba(234,28,10,.95),0 10px 0 #5a0600}
+.slam.yel{color:var(--yel);text-shadow:0 0 50px rgba(230,226,0,.7),0 10px 0 var(--red2)}
+@keyframes slamIn{0%{transform:scale(3.2);opacity:0;filter:blur(12px)}100%{transform:scale(1);opacity:1;filter:blur(0)}}
+.say{font-weight:900;font-size:clamp(26px,4.8vw,70px);line-height:1.12;max-width:18ch;animation:sayIn .6s cubic-bezier(.2,1.4,.4,1) both}
+.say b{color:var(--yel)}
+.say.yel{color:var(--yel);font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(38px,7vw,110px)}
+.say.type{font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(26px,4.4vw,64px);animation:none}
+@keyframes sayIn{0%{transform:translateY(50px) scale(.9);opacity:0;letter-spacing:.2em}100%{transform:none;opacity:1;letter-spacing:0}}
+.out{animation:outA .38s ease-in forwards !important}
+@keyframes outA{to{opacity:0;transform:scale(.75);filter:blur(6px)}}
+.count{font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(140px,36vw,440px);line-height:1;color:var(--yel);text-shadow:0 0 70px rgba(230,226,0,.8);animation:countPop .9s both}
+@keyframes countPop{0%{transform:scale(.2);opacity:0}25%{transform:scale(1.15);opacity:1}70%{transform:scale(1);opacity:1}100%{transform:scale(2.4);opacity:0}}
+
+.reveal{display:flex;flex-direction:column;align-items:center;gap:1.4vh}
+.kicker{font-weight:900;font-size:clamp(16px,3vw,42px);letter-spacing:.16em;text-transform:uppercase;animation:rise .6s both}
+.kicker small{display:block;font-size:.6em;letter-spacing:.1em;color:var(--yel);margin-top:.3em}
+.name{font-family:'Archivo Black','Arial Black',sans-serif;line-height:.95;white-space:nowrap;color:#fff;text-shadow:0 0 30px rgba(234,28,10,.9)}
+.name.won{color:var(--yel);text-shadow:0 0 30px rgba(230,226,0,.85),0 0 100px rgba(255,255,255,.5),0 14px 0 var(--red2)}
+.name.won span{display:inline-block;animation:letterPop .7s cubic-bezier(.2,1.8,.4,1) both, wave 1.6s ease-in-out infinite}
+@keyframes letterPop{0%{transform:translateY(-120%) scale(.3) rotate(-30deg);opacity:0}100%{transform:none;opacity:1}}
+@keyframes wave{0%,100%{transform:translateY(0)}50%{transform:translateY(-10%)}}
+.stat{opacity:0;display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap}
+.stat.show{animation:rise .6s both}
+.num{font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(64px,12vw,180px);line-height:1;color:#fff;text-shadow:0 8px 0 var(--red2)}
+.unit{font-weight:900;font-size:clamp(22px,4vw,56px);color:var(--yel);margin-left:.35em}
+.meta{opacity:0;font-weight:800;font-size:clamp(15px,2.2vw,28px);background:rgba(0,0,0,.25);padding:.4em 1.1em;border-radius:999px}
+.meta.show{animation:rise .6s both}
+
+#flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:50}
+#flash.go{animation:flashA .8s ease-out}
+@keyframes flashA{0%{opacity:1}100%{opacity:0}}
+#confetti{position:fixed;inset:0;z-index:45;pointer-events:none}
+
+/* FINAL */
+#final{justify-content:safe center;gap:3vh;overflow-y:auto}
+.slide{position:relative;z-index:3;background:#fff;color:var(--red);width:min(1100px,94vw);border-radius:22px;padding:clamp(22px,3.5vw,50px);box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 0 6px rgba(255,255,255,.25);text-align:left;flex-shrink:0}
+#final.on .slide{animation:slideIn .9s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes slideIn{0%{transform:translateY(-110vh) rotate(-6deg)}100%{transform:none}}
+.s-title{font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(26px,4.4vw,58px);line-height:1.05}
+.s-date{font-weight:700;font-size:clamp(13px,1.4vw,17px);opacity:.7;margin-top:6px}
+.s-intro{font-weight:800;font-size:clamp(15px,1.9vw,24px);margin:2.2vh 0 6vh;max-width:36ch}
+.s-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(48px,7vw,100px);align-items:end;padding:0 clamp(10px,3vw,40px) clamp(20px,3vw,40px)}
+.lbl{font-weight:900;font-size:clamp(15px,1.9vw,24px);text-align:center;margin-bottom:34px;min-height:2.5em;display:flex;align-items:flex-end;justify-content:center}
+.card{position:relative;background:var(--red);color:#fff;border-radius:22px;padding:clamp(28px,3.8vw,52px) 20px;text-align:center;font-weight:800;font-size:clamp(18px,2.4vw,30px);box-shadow:0 16px 34px rgba(234,28,10,.4)}
+.c1 .card{font-family:'Archivo Black','Arial Black',sans-serif;font-size:clamp(24px,3.2vw,42px);font-weight:400}
+#final.on .c1 .lbl{animation:rise .6s .8s both}
+#final.on .c2 .lbl{animation:rise .6s 1.5s both}
+#final.on .c1 .card{animation:cardPop .8s cubic-bezier(.2,1.6,.4,1) 1s both, floaty 3s ease-in-out 2s infinite}
+#final.on .c2 .card{animation:cardPop .8s cubic-bezier(.2,1.6,.4,1) 1.7s both, floaty 3.4s ease-in-out 2.7s infinite}
+@keyframes cardPop{0%{transform:scale(0) rotate(-12deg);opacity:0}100%{transform:none;opacity:1}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.sheen{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none}
+.sheen::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);animation:sheen 3.2s ease-in-out 2.4s infinite}
+@keyframes sheen{0%{left:-60%}45%,100%{left:130%}}
+.crown{position:absolute;top:-1.05em;left:50%;font-size:1.3em;animation:crown 1.4s ease-in-out infinite}
+@keyframes crown{0%,100%{transform:translateX(-50%) rotate(-8deg)}50%{transform:translateX(-50%) translateY(-6px) rotate(8deg)}}
+.st{position:absolute;width:clamp(64px,8vw,104px);aspect-ratio:1;background:var(--yel);clip-path:polygon(50% 0%,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0% 50%,39% 39%);animation:starspin 5s linear infinite}
+.st1{top:-48%;left:-14%}
+.st2{bottom:-48%;right:-14%;animation-duration:6.5s;animation-direction:reverse}
+@keyframes starspin{0%{transform:rotate(0) scale(1)}25%{transform:rotate(90deg) scale(1.2)}50%{transform:rotate(180deg) scale(1)}75%{transform:rotate(270deg) scale(1.2)}100%{transform:rotate(360deg) scale(1)}}
+.actions{position:relative;z-index:3;display:flex;gap:16px;flex-wrap:wrap;justify-content:center;flex-shrink:0}
+#final.on .actions{animation:rise .6s 2.4s both}
+.abtn{font-weight:900;font-size:clamp(15px,1.8vw,20px);padding:.7em 1.4em;border-radius:999px;border:3px solid #fff;background:rgba(0,0,0,.2);color:#fff;cursor:pointer;transition:transform .15s}
+.abtn:hover{transform:scale(1.06)}
+.abtn.y{background:var(--yel);color:var(--red2);border-color:var(--yel)}
+
+/* Controls */
+.ctrl{position:fixed;z-index:60;border:0;cursor:pointer;font-weight:800;color:#fff;background:rgba(0,0,0,.35);border-radius:999px;padding:.55em .9em;font-size:15px;backdrop-filter:blur(4px)}
+#mute{top:14px;right:14px}
+#skip{bottom:14px;right:14px;opacity:0;pointer-events:none;transition:opacity .4s}
+#skip.on{opacity:.75;pointer-events:auto}
+#skip.on:hover{opacity:1}
+
+@media (max-width:700px){
+  .s-grid{grid-template-columns:1fr;gap:70px}
+  .lbl{min-height:0}
+}
+@media (prefers-reduced-motion:reduce){.rays{animation:none}}
+</style>
+</head>
+<body>
+
+<section id="intro" class="scene on">
+  <div class="rays"></div>
+  <div class="content">
+    <div class="kick">📣 Det lilla Extra · September 2026</div>
+    <h1 class="q">Vill du veta vem som vann <span class="hl">NPS:en</span> för september?</h1>
+    <div class="btns">
+      <button class="btn ja" id="ja">JA! 🔥</button>
+      <button class="btn nej" id="nej">Nej</button>
+    </div>
+    <div class="hint" id="hint"></div>
+    <div class="sound">🔊 Ljud på för full effekt</div>
+  </div>
+</section>
+
+<section id="nope" class="scene">
+  <div class="rays"></div>
+  <div id="nopeText"></div>
+  <div id="nopeEmoji">😏</div>
+  <div id="nopeSub">…och du kommer gilla det.</div>
+</section>
+
+<section id="stage" class="scene">
+  <div class="rays"></div>
+  <div class="beam b1"></div><div class="beam b2"></div>
+  <div class="vig"></div>
+  <div id="lines"></div>
+</section>
+
+<section id="final" class="scene">
+  <div class="rays"></div>
+  <div class="slide">
+    <h2 class="s-title">Det lilla Extra – september</h2>
+    <div class="s-date">Uppdaterad 2026-10-23</div>
+    <p class="s-intro">De två personerna som har gjort det lilla extra den här månaden! (telefoni &amp; chatt &amp; mail)</p>
+    <div class="s-grid">
+      <div class="col c1">
+        <div class="lbl">Mest 9 – 10 (alla kontaktsätt)<br>Månadens NPS</div>
+        <div class="card"><span class="sheen"></span><span class="crown">👑</span>Lucas (16 st)<i class="st st1"></i><i class="st st2"></i></div>
+      </div>
+      <div class="col c2">
+        <div class="lbl">Högst NPS (telefoni) minst 6 svar:</div>
+        <div class="card"><span class="sheen"></span>Denise T – 83,3 (6 svar)<i class="st st1"></i><i class="st st2"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="abtn y" id="more">🎉 Mer konfetti</button>
+    <button class="abtn" id="again">🔁 Spela igen</button>
+  </div>
+</section>
+
+<div id="flash"></div>
+<canvas id="confetti"></canvas>
+<button class="ctrl" id="mute">🔊</button>
+<button class="ctrl" id="skip">Hoppa till resultat ⏭</button>
+
+<script>
+const $=s=>document.querySelector(s);
+const stage=$('#stage'), lines=$('#lines');
+let runId=0;
+const sleep=ms=>new Promise((res,rej)=>{const id=runId;setTimeout(()=>id===runId?res():rej('skip'),ms)});
+
+/* ---------- Ljud (Web Audio, inga filer behövs) ---------- */
+let AC=null, master=null, noiseBuf=null, muted=false;
+function initAudio(){
+  if(AC){ if(AC.state==='suspended') AC.resume(); return; }
+  try{
+    AC=new (window.AudioContext||window.webkitAudioContext)();
+    master=AC.createGain(); master.gain.value=muted?0:.8; master.connect(AC.destination);
+    noiseBuf=AC.createBuffer(1,AC.sampleRate,AC.sampleRate);
+    const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  }catch(e){AC=null}
+}
+function killAudio(){ if(!AC) return; master.disconnect(); master=AC.createGain(); master.gain.value=muted?0:.8; master.connect(AC.destination); }
+function tone(f,t,d,type='square',vol=.1){
+  if(!AC) return;
+  const o=AC.createOscillator(), g=AC.createGain(), lp=AC.createBiquadFilter();
+  lp.type='lowpass'; lp.frequency.value=3200; o.type=type; o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(vol,t+.02);
+  g.gain.setValueAtTime(vol,t+Math.max(.03,d-.05)); g.gain.exponentialRampToValueAtTime(.0001,t+d+.2);
+  o.connect(lp).connect(g).connect(master); o.start(t); o.stop(t+d+.25);
+}
+function tick(f=900,vol=.05){ if(AC) tone(f,AC.currentTime,.035,'square',vol); }
+function snare(t,vol=.4){
+  const s=AC.createBufferSource(); s.buffer=noiseBuf;
+  const f=AC.createBiquadFilter(); f.type='highpass'; f.frequency.value=1200;
+  const g=AC.createGain(); g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+.12);
+  s.connect(f).connect(g).connect(master); s.start(t); s.stop(t+.15);
+}
+function drumroll(sec){
+  if(!AC) return; const start=AC.currentTime; let t=start;
+  while(t<start+sec){ const p=(t-start)/sec; snare(t,.12+.45*p); t+=.11-.085*p; }
+}
+function riser(sec){
+  if(!AC) return; const t=AC.currentTime;
+  const o=AC.createOscillator(), g=AC.createGain(), lp=AC.createBiquadFilter();
+  o.type='sawtooth'; lp.type='lowpass'; lp.frequency.setValueAtTime(400,t); lp.frequency.exponentialRampToValueAtTime(4000,t+sec);
+  o.frequency.setValueAtTime(110,t); o.frequency.exponentialRampToValueAtTime(880,t+sec);
+  g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.09,t+sec); g.gain.exponentialRampToValueAtTime(.0001,t+sec+.1);
+  o.connect(lp).connect(g).connect(master); o.start(t); o.stop(t+sec+.15);
+}
+function boom(vol=1){
+  if(!AC) return; const t=AC.currentTime;
+  const o=AC.createOscillator(), g=AC.createGain();
+  o.type='sine'; o.frequency.setValueAtTime(160,t); o.frequency.exponentialRampToValueAtTime(38,t+.55);
+  g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+.75);
+  o.connect(g).connect(master); o.start(t); o.stop(t+.8); snare(t,.35*vol);
+}
+function thud(){ if(!AC) return; const t=AC.currentTime; const o=AC.createOscillator(), g=AC.createGain();
+  o.frequency.setValueAtTime(95,t); o.frequency.exponentialRampToValueAtTime(45,t+.25);
+  g.gain.setValueAtTime(.8,t); g.gain.exponentialRampToValueAtTime(.001,t+.3); o.connect(g).connect(master); o.start(t); o.stop(t+.32); }
+function whoosh(){
+  if(!AC) return; const t=AC.currentTime;
+  const s=AC.createBufferSource(); s.buffer=noiseBuf;
+  const f=AC.createBiquadFilter(); f.type='bandpass'; f.Q.value=1.2;
+  f.frequency.setValueAtTime(400,t); f.frequency.exponentialRampToValueAtTime(3500,t+.45);
+  const g=AC.createGain(); g.gain.setValueAtTime(.001,t); g.gain.exponentialRampToValueAtTime(.3,t+.2); g.gain.exponentialRampToValueAtTime(.001,t+.5);
+  s.connect(f).connect(g).connect(master); s.start(t); s.stop(t+.55);
+}
+function fanfare(){
+  if(!AC) return; const t=AC.currentTime;
+  [[523.25,0,.13],[659.25,.13,.13],[783.99,.26,.13],[1046.5,.39,1.1]].forEach(([f,s,d])=>tone(f,t+s,d,'sawtooth',.16));
+  [523.25,659.25,783.99].forEach(f=>tone(f,t+.39,1.1,'square',.05));
+}
+
+/* ---------- Konfetti ---------- */
+const cv=$('#confetti'), cx=cv.getContext('2d'); let P=[], rainUntil=0;
+const COLORS=['#EA1C0A','#E6E200','#ffffff','#ff6a4d','#FFD400'];
+function resize(){cv.width=innerWidth;cv.height=innerHeight}
+addEventListener('resize',resize); resize();
+function particle(x,y,a,v){
+  return {x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,rot:Math.random()*6.28,vr:(Math.random()-.5)*.3,
+    w:6+Math.random()*8,h:8+Math.random()*12,c:COLORS[Math.random()*COLORS.length|0],star:Math.random()<.18};
+}
+function burst(n=160,x=innerWidth/2,y=innerHeight*.45,angle=0,spread=Math.PI*2,power=15){
+  for(let i=0;i<n;i++) P.push(particle(x,y,angle+(Math.random()-.5)*spread,power*(.35+Math.random()*.75)));
+}
+function cannons(){
+  burst(140,0,innerHeight,-Math.PI/3,Math.PI/4,26);
+  burst(140,innerWidth,innerHeight,-2*Math.PI/3,Math.PI/4,26);
+}
+function rain(ms){rainUntil=performance.now()+ms}
+function drawStar(s){cx.beginPath();for(let i=0;i<8;i++){const r=i%2?s*.32:s;const a=i*Math.PI/4-Math.PI/2;cx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}cx.closePath();cx.fill()}
+function loop(now){
+  if(now<rainUntil) for(let i=0;i<4;i++){const p=particle(Math.random()*innerWidth,-20,Math.PI/2,2+Math.random()*3);P.push(p)}
+  cx.clearRect(0,0,cv.width,cv.height);
+  for(const p of P){
+    p.vy+=.32; p.vx*=.985; p.vy*=.985; p.x+=p.vx+Math.sin(p.rot)*.6; p.y+=p.vy; p.rot+=p.vr;
+    cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot); cx.fillStyle=p.c;
+    if(p.star) drawStar(p.w); else { cx.scale(1,Math.cos(p.rot*2)); cx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
+    cx.restore();
+  }
+  P=P.filter(p=>p.y<innerHeight+60).slice(-1200);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ---------- Effekthjälpare ---------- */
+function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.toggle('on',s.id===id))}
+function flash(){const f=$('#flash');f.classList.remove('go');void f.offsetWidth;f.classList.add('go')}
+function shake(){stage.classList.remove('shake');void stage.offsetWidth;stage.classList.add('shake')}
+function fitPx(text,maxPx,hFrac){return Math.min(maxPx,innerWidth*.9/(text.length*.8),innerHeight*hFrac)}
+function line(html,cls){const d=document.createElement('div');d.className='line '+cls;d.innerHTML=html;lines.appendChild(d);return d}
+async function out(d){d.classList.add('out');await sleep(380);d.remove()}
+async function slam(txt,hold=800,cls=''){
+  const d=line(txt,'slam '+cls); d.style.fontSize=fitPx(txt,240,.4)+'px';
+  boom(); shake(); await sleep(hold); await out(d);
+}
+async function say(html,hold=1500,cls=''){whoosh();const d=line(html,'say '+cls);await sleep(hold);await out(d)}
+async function typeSay(text,hold=1000){
+  const d=line('','say type');
+  for(const ch of text){d.textContent+=ch;if(ch!==' ')tick(1300,.025);await sleep(48)}
+  await sleep(hold); await out(d);
+}
+function scramble(node,final,dur){
+  return new Promise((res,rej)=>{
+    const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ#?!%&', start=performance.now(), id0=runId; let last=0, locked=0;
+    function frame(now){
+      if(id0!==runId) return rej('skip');
+      const p=Math.min(1,(now-start)/dur);
+      if(now-last>55||p===1){
+        last=now; let outS='', lc=0;
+        for(let i=0;i<final.length;i++){
+          const lockAt=.6+.4*(i+1)/final.length;
+          if(final[i]===' ') outS+='\u00A0';
+          else if(p>=lockAt){outS+=final[i];lc++}
+          else outS+=chars[Math.random()*chars.length|0];
+        }
+        if(lc>locked){locked=lc;thud()}
+        node.textContent=outS;
+      }
+      p<1?requestAnimationFrame(frame):res();
+    }
+    requestAnimationFrame(frame);
+  });
+}
+function countUp(node,to,dur,dec=0){
+  return new Promise((res,rej)=>{
+    const s=performance.now(), id0=runId; let lastInt=-1;
+    function f(now){
+      if(id0!==runId) return rej('skip');
+      const p=Math.min(1,(now-s)/dur), v=p===1?to:to*(1-Math.pow(1-p,3));
+      node.textContent=v.toLocaleString('sv-SE',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+      const iv=Math.floor(v); if(iv!==lastInt){lastInt=iv;tick(500+(v/to)*900,.05)}
+      p<1?requestAnimationFrame(f):res();
+    }
+    requestAnimationFrame(f);
+  });
+}
+const spans=t=>[...t].map((c,i)=>`<span style="animation-delay:${(i*.08).toFixed(2)}s,${(.9+i*.12).toFixed(2)}s">${c===' '?'&nbsp;':c}</span>`).join('');
+
+async function reveal({kicker,name,num,dec,unit,meta,roll,hold,big=true}){
+  const r=line(`<div class="kicker">${kicker}</div><div class="name"></div><div class="stat"><span class="num">0</span><span class="unit">${unit}</span></div><div class="meta">${meta}</div>`,'reveal');
+  const nm=r.querySelector('.name'), st=r.querySelector('.stat'), nu=r.querySelector('.num'), me=r.querySelector('.meta');
+  nm.style.fontSize=fitPx(name,340,.3)+'px';
+  nm.textContent='?'.repeat(name.length);
+  stage.classList.add('beams','tense');
+  drumroll(roll/1000); riser(roll/1000);
+  await sleep(500);
+  await scramble(nm,name,roll-500);
+  stage.classList.remove('beams','tense'); stage.classList.add('rays-on');
+  flash(); boom(); shake(); fanfare();
+  if(big){cannons();burst(200)} else burst(140);
+  nm.classList.add('won'); nm.innerHTML=spans(name);
+  await sleep(800);
+  st.classList.add('show');
+  await countUp(nu,num,2000,dec);
+  boom(.6); burst(70,innerWidth/2,innerHeight*.62,-Math.PI/2,Math.PI,12);
+  me.classList.add('show'); rain(big?3500:2200);
+  await sleep(hold);
+  await out(r);
+  stage.classList.remove('rays-on');
+}
+
+function resetStage(){lines.innerHTML='';stage.classList.remove('rays-on','beams','tense','shake')}
+
+/* ---------- Själva showen ---------- */
+async function hype(){
+  runId++; resetStage(); show('stage'); $('#skip').classList.add('on');
+  try{
+    await sleep(700);
+    await typeSay('Okej… luta dig tillbaka.',900);
+    await typeSay('Det här är inte vilken månad som helst.',1000);
+    await slam('SEPTEMBER',1400,'red');
+    await slam('2026',800);
+    await say('Månadens <b>NPS</b>',1500);
+    await slam('TELEFONI',620);
+    await slam('CHATT',620);
+    await slam('MAIL',620);
+    await say('Alla kontaktsätt.<br>Varenda <b>9:a</b>. Varenda <b>10:a</b>.',2300);
+    await say('En person har gjort <b>det lilla extra</b>…',1900);
+    await say('…lite <b>mer</b> än alla andra. 🔥',1900);
+    await say('Är du redo?',1300,'yel');
+    stage.classList.add('tense');
+    for(const n of [3,2,1]){const d=line(String(n),'count');tick(660,.08);thud();shake();await sleep(900);d.remove()}
+    await reveal({kicker:'Månadens NPS-vinnare är…',name:'LUCAS',num:16,dec:0,unit:'st 9–10:or',
+      meta:'Mest 9–10 · telefoni, chatt &amp; mail',roll:4800,hold:4600,big:true});
+    await say('Men vänta… 👀',1500);
+    await say('Det finns en till som <b>måste</b> lyftas!',1900);
+    await reveal({kicker:'Högst NPS · Telefoni<small>minst 6 svar</small>',name:'DENISE T',num:83.3,dec:1,unit:'NPS',
+      meta:'6 svar · telefoni',roll:2800,hold:4000,big:false});
+    await say('Grattis båda två! 🏆',1600,'yel');
+    showFinal();
+  }catch(e){}
+}
+function showFinal(){
+  show('final'); $('#skip').classList.remove('on');
+  const id=runId;
+  setTimeout(()=>{if(id!==runId)return;flash();fanfare();cannons();rain(4000)},900);
+}
+async function nope(){
+  runId++; show('nope');
+  const t=$('#nopeText'), e=$('#nopeEmoji'), s=$('#nopeSub');
+  t.textContent=''; e.classList.remove('pop'); s.classList.remove('show');
+  try{
+    await sleep(500);
+    for(const ch of 'Men det kommer jag säga ändå.'){t.textContent+=ch;if(ch!==' ')tick(1400,.03);await sleep(55)}
+    await sleep(350); e.classList.add('pop'); boom(.8);
+    await sleep(1000); s.classList.add('show'); whoosh();
+    await sleep(2000); hype();
+  }catch(_){}
+}
+
+/* ---------- Intro ---------- */
+for(let i=0;i<16;i++){
+  const s=document.createElement('i'); s.className='fstar'; const size=18+Math.random()*56;
+  s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*96}%;top:${Math.random()*92}%;animation-duration:${4+Math.random()*5}s;animation-delay:${-Math.random()*6}s`;
+  $('#intro').appendChild(s);
+}
+const nej=$('#nej'), hint=$('#hint'); let dodges=0;
+function resetIntro(){dodges=0;nej.style.transform='';hint.textContent=''}
+nej.addEventListener('pointerenter',e=>{
+  if(e.pointerType!=='mouse'||dodges>=2) return; dodges++;
+  const mx=Math.min(220,innerWidth*.25);
+  const x=(Math.random()<.5?-1:1)*(mx*.5+Math.random()*mx*.5), y=(Math.random()<.5?-1:1)*(30+Math.random()*50);
+  nej.style.transform=`translate(${x}px,${y}px) rotate(${(Math.random()*24-12).toFixed(1)}deg)`;
+  hint.textContent=dodges===1?'Hoppsan 😅 Försök igen…':'Okej okej… du får trycka.';
+});
+$('#ja').onclick=()=>{initAudio();whoosh();hype()};
+nej.onclick=()=>{initAudio();nope()};
+$('#skip').onclick=()=>{runId++;killAudio();resetStage();showFinal()};
+$('#again').onclick=()=>{runId++;killAudio();resetIntro();show('intro')};
+$('#more').onclick=()=>{initAudio();fanfare();cannons();burst(180);rain(2500)};
+$('#mute').onclick=()=>{muted=!muted;$('#mute').textContent=muted?'🔇':'🔊';if(master)master.gain.value=muted?0:.8};
+</script>
+</body>
+</html>
